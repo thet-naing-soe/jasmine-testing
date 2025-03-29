@@ -1,55 +1,27 @@
 // Test Suite
-//  Unit Testing: Mocks
 
 describe(`${User.name} Class`, () => {
-  let model;
-  let mockUserService;
-
-  beforeEach(() => {
-    mockUserService = {
-      lastId: null,
-      user: {},
-      getUserById(id) {
-        this.lastId = id;
-
-        return this.user;
-      },
-    };
-    const data = {
-      firstName: "Dylan",
-      middleName: "Christopher",
-      lastName: "Israel",
-      id: 1,
-    };
-    model = new User(data, mockUserService);
-  });
-
-  describe("getMyFullUserData", () => {
-    it("passes id to get user", async () => {
-      // arrange
-      mockUserService.lastId = null;
-
-      // act
-      const result = await model.getMyFullUserData();
-
+    it("exists", () => {
       // assert
-      expect(mockUserService.lastId).toBe(1);
+      expect(User).toBeDefined()
+    })
+    let model;
+    
+    beforeEach(() => {
+        model = new User();
     });
-    it("gets full user data", async () => {
-      // arrange
-      mockUserService.user = new User({
-        firstName: "Dollan",
-        middleName: "Coding Go",
-        lastName: "Noneya",
-        id: 2,
-      });
+    describe("additional matchers examples", () => {
+      it("gets full name pieces", () => {
+        // arrange
+        const firstName = 'Dylan'
+        const lastName = "Christopher"
+        const middleName = "Israel"
 
-      // act
-      const result = await model.getMyFullUserData()
+        // act
+        model = new User({firstName, middleName, lastName})
 
-      // assert
-      expect(result.id).toBe(2)
-      expect(result.firstName).toBe('Dollan')
-    });
-  });
-});
+        // assert
+        expect(model.fullNamePieces).toEqual([firstName, middleName, lastName])
+      })
+    })
+})
