@@ -1,67 +1,44 @@
 // Test Suite
+//  Unit Testing: Mocks
 
 describe(`${User.name} Class`, () => {
   let model;
+  let mockUserService;
 
   beforeEach(() => {
-    model = new User();
+    mockUserService = {
+      lastId: null,
+      user: {},
+      getUserById(id) {
+        this.lastId = id;
+
+        return this.user;
+      },
+    };
+    const data = {
+      firstName: "Dylan",
+      middleName: "Christopher",
+      lastName: "Israel",
+      id: 1,
+    };
+    model = new User(data, mockUserService);
   });
 
-  describe("default values", () => {
-    it("first name defaults to empty", () => {
-      // assert
-      expect(model.firstName).toBe("");
-    });
-
-    it("last name defaults to empty", () => {
-      // assert
-      expect(model.lastName).toBe("");
-    });
-
-    it("middle name defaults to empty", () => {
-      // assert
-      expect(model.middleName).toBe("");
-    });
-  });
-  describe("full name", () => {
-    beforeEach(() => {
-      model = new User({ firstName: "Thet", lastName: "Soe" });
-    });
-    it("middle initial when middleName is defined with first and last", () => {
+  describe("getMyFullUserData", () => {
+    it("gets user data by id", async () => {
       // arrange
-      model.middleName = "Naing";
-
+      mockUserService.lastId = null;
+      mockUserService.user = new User({
+        firstName: "Dollan",
+        middleName: "Coding God",
+        lastName: "Noneya",
+        id: 2,
+      });
       // act
-      const result = model.fullName;
+      const result = await model.getMyFullUserData();
 
       // assert
-      expect(result).toBe(
-        `${model.firstName} ${model.middleName[0]}. ${model.lastName}`
-      );
-    });
-    it("when no middle name return just first and last", () => {
-      // arrange
-      model.middleName = "";
-
-      // act
-      const result = model.fullName;
-
-      // assert
-      expect(result).toBe(`${model.firstName} ${model.lastName}`);
-    });
-  });
-  describe("say my name", () => {
-    it("alerts the full name of user", () => {
-      // arrange
-      model.firstName = "Thet";
-      model.lastName = "Soe";
-      spyOn(window, "alert");
-
-      // act
-      model.sayMyName();
-
-      // assert
-      expect(window.alert).toHaveBeenCalledWith("Thet Soe");
+      expect(mockUserService.lastId).toBe(1);
     });
   });
 });
