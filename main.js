@@ -50,4 +50,18 @@ describe(`${User.name} Class`, () => {
       expect(result).toBe(`${model.firstName} ${model.lastName}`);
     });
   });
+  describe("say my name", () => {
+    it("alerts the full name of user", () => {
+      // arrange
+      model.firstName = "Thet";
+      model.lastName = "Soe";
+      spyOn(window, "alert");
+
+      // act
+      model.sayMyName();
+
+      // assert
+      expect(window.alert).toHaveBeenCalledWith("Thet Soe");
+    });
+  });
 });
